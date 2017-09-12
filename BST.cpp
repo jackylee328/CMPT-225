@@ -11,9 +11,140 @@
  */
 
 #include "BST.h"
-//#include "WordPair.h"
+#include <cstddef>
 #include "ElementAlreadyExistsInBSTException.h"
 #include "ElementDoesNotExistInBSTException.h"
+
+template <class ElementType>
+int BST<ElementType>::nodeCountR(BSTNode<ElementType>* current) const{
+	int count = 1;
+	if (current->hasLeft()){
+		count += nodeCountR(current->left);
+	}
+	if (current->hasRight()){
+		count += nodeCountR(current->right);
+	}
+	return count;
+}
+
+template <class ElementType>
+int BST<ElementType>::nodeCount() const{
+	if (elementCount == 0){
+		return 0;
+	}
+	return nodeCountR(root);
+}
+
+template <class ElementType>
+ElementType& BST<ElementType>::minR(BSTNode<ElementType>* current) const{
+	if (current->hasLeft()){
+		return minR(current->left);
+	}
+	return current->element;
+}
+
+template <class ElementType>
+ElementType& BST<ElementType>::min() const throw(ElementDoesNotExistInBSTException){
+	if (elementCount == 0){
+		throw ElementDoesNotExistInBSTException("min does not exist");
+	}
+	else{
+		return minR(root);
+	}
+}
+
+template <class ElementType>
+ElementType& BST<ElementType>::maxR(BSTNode<ElementType>* current) const{
+	if (current->hasRight()){
+		return maxR(current->right);
+	}
+	return current->element;
+}
+
+template <class ElementType>
+ElementType& BST<ElementType>::max() const throw(ElementDoesNotExistInBSTException){
+	if (elementCount == 0){
+		throw ElementDoesNotExistInBSTException("max does not exist");
+	}
+	else{
+		return maxR(root);
+	}
+}
+
+template <class ElementType>
+int BST<ElementType>::duplicateR(const ElementType& targetElement, BSTNode<ElementType> * current){
+	int count = 0;
+	if (current->element == targetElement){
+		count++;
+	}
+	if (current->hasLeft()){
+		count += duplicateR(targetElement, current->left);
+	}
+	if (current->hasRight()){
+		count += duplicateR(targetElement, current->right);
+	}
+	return count;
+}
+
+template <class ElementType>
+int BST<ElementType>::duplicate(const ElementType& targetElement){
+	if (elementCount == 0){
+		return 0;
+	}
+	return duplicateR(targetElement, root);
+}
+
+template <class ElementType>
+BSTNode<ElementType>* BST<ElementType>::removeR(const ElementType& targetElement, BSTNode<ElementType>* current) const throw(ElementDoesNotExistInBSTException){
+	if (current->element == targetElement){
+    	// Case 1: No Child
+    	if(current->isLeaf()){
+      		delete current;
+			current = NULL;
+    	// Case 2: one child
+		}
+		else if(!current->hasLeft()){
+    		BSTNode<ElementType>* temp = current;
+      		current = current->right;
+	    	delete temp;
+    	}
+		else if(!current->hasRight()){
+      		BSTNode<ElementType>* temp = current;
+      		current = current->left;
+      		delete temp;
+    	}
+		else{
+      		ElementType temp = minR(current->right);
+      		current->element = temp;
+      		current->right = removeR(temp, current->right);
+    	}
+  	}
+	else if (current->element < targetElement){
+		if (current->hasRight()){
+			removeR(targetElement, current->right);
+		}
+		else{
+			throw ElementDoesNotExistInBSTException("element does not exist");
+		}
+	}
+	else{
+		if (current->hasLeft()){
+			removeR(targetElement, current->left);
+		}
+		else{
+			throw ElementDoesNotExistInBSTException("element does not exist");
+		}
+	}
+	return current;
+}
+
+template <class ElementType>
+void BST<ElementType>::remove(const ElementType& targetElement) const throw(ElementDoesNotExistInBSTException){
+	if (elementCount == 0){
+		throw ElementDoesNotExistInBSTException("element does not exist");
+	}
+	removeR(targetElement, root);
+}
 
 template <class ElementType>
 bool BST<ElementType>::insertR(const ElementType& element, BSTNode<ElementType>* current) throw(ElementAlreadyExistsInBSTException){
