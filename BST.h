@@ -28,6 +28,11 @@ private:
     bool insertR(const ElementType& element, BSTNode<ElementType>* current) throw(ElementAlreadyExistsInBSTException);
     ElementType& retrieveR(const ElementType& targetElement, BSTNode<ElementType>* current) const throw(ElementDoesNotExistInBSTException);
 	void traverseInOrderR(void visit(ElementType&), BSTNode<ElementType>* current) const;
+	int nodeCountR(BSTNode<ElementType>* current) const;
+	ElementType& minR(BSTNode<ElementType>* current) const;
+	ElementType& maxR(BSTNode<ElementType>* current) const;
+	int duplicateR(const ElementType& targetElement, BSTNode<ElementType> * current);
+	BSTNode<ElementType>* removeR(const ElementType& targetElement, BSTNode<ElementType>* current) const throw(ElementDoesNotExistInBSTException);
 
 public:
     // Constructors and destructor:
@@ -37,6 +42,12 @@ public:
     ~BST();                              // Destructor
 
     // BST operations:
+
+	int nodeCount() const;
+	ElementType& min() const throw(ElementDoesNotExistInBSTException);
+	ElementType& max() const throw(ElementDoesNotExistInBSTException);
+	int duplicate(const ElementType& targetElement);
+	void remove(const ElementType& targetElement) const throw(ElementDoesNotExistInBSTException);
 
     // Time efficiency: O(1)
 	int getElementCount() const;

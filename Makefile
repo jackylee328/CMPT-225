@@ -1,10 +1,10 @@
 all: tApp
 
-tApp: TApp.o BST.h BSTNode.h WordPair.o ElementAlreadyExistsInBSTException.o ElementDoesNotExistInBSTException.o
-	g++ -Wall -std=c++11 -o tApp TApp.o WordPair.o ElementAlreadyExistsInBSTException.o ElementDoesNotExistInBSTException.o
+tApp: BST_Test_Driver.o BST.h BSTNode.h WordPair.o ElementAlreadyExistsInBSTException.o ElementDoesNotExistInBSTException.o
+	g++ -Wall -std=c++11 -o tApp BST_Test_Driver.o WordPair.o ElementAlreadyExistsInBSTException.o ElementDoesNotExistInBSTException.o
 
-TApp.o: TApp.cpp
-	g++ -Wall -std=c++11 -c TApp.cpp 
+BST_Test_Driver.o: BST_Test_Driver.cpp
+	g++ -Wall -std=c++11 -c BST_Test_Driver.cpp 
 		
 WordPair.o: WordPair.h WordPair.cpp
 	g++ -Wall -std=c++11 -c WordPair.cpp
